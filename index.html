@@ -3,67 +3,74 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PANACEA PRIME — Enhanced</title>
+  <title>PANACEA PRIME — Enhanced + Modules</title>
   <style>
-    /* ---- Base layout ---- */
     :root{--bg:#07080b;--panel:#0f1720;--accent:#39ffca;--muted:#95a0b3;--danger:#ff4d6d}
     *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
     body{background:radial-gradient(1200px 600px at 10% 10%, rgba(10,14,22,0.6), transparent),linear-gradient(180deg,#04101a 0%, #060612 40%),var(--bg);color:#e6eef6}
-    .wrap{max-width:1100px;margin:28px auto;padding:22px;display:grid;grid-template-columns:1fr 420px;gap:20px}
-    header{display:flex;align-items:center;gap:14px}
+    .wrap{max-width:1200px;margin:20px auto;padding:18px;display:grid;grid-template-columns:1fr 380px;gap:18px}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(2,6,12,0.7);border:1px solid rgba(255,255,255,0.03)}
+    header{display:flex;align-items:center;gap:12px}
     .logo{font-weight:700;letter-spacing:1px}
     .logo .mark{color:var(--accent);font-family:monospace}
-    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(2,6,12,0.7);border:1px solid rgba(255,255,255,0.03)}
 
-    /* ---- Left (main console) ---- */
-    .console{min-height:540px;padding:18px;display:flex;flex-direction:column;gap:12px}
+    /* main console */
+    .console{min-height:620px;padding:14px;display:flex;flex-direction:column;gap:12px}
     .status-row{display:flex;align-items:center;gap:12px}
     .status-dot{width:12px;height:12px;border-radius:50%}
     .status-online{background:linear-gradient(180deg,#36f0b2,#00b388);box-shadow:0 0 14px rgba(57,255,202,0.12)}
     .meta{color:var(--muted);font-size:13px}
 
-    .terminal{background:#04060a;border-radius:8px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;color:#a6f7e0;min-height:360px;overflow:hidden;position:relative}
+    .terminal{background:#03050a;border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;color:#a6f7e0;min-height:420px;overflow:hidden;position:relative}
     .terminal .stream{height:100%;overflow:auto;padding-right:8px}
     .line{white-space:pre-wrap;font-size:13px;line-height:1.45}
     .muted{color:rgba(166,247,224,0.55)}
+    .cursor{display:inline-block;width:8px;height:14px;background:var(--accent);margin-left:6px;vertical-align:middle;animation:blink 1s steps(2) infinite}
+    @keyframes blink{50%{opacity:0}}
 
     /* progress */
     .progress-wrap{display:flex;align-items:center;gap:10px}
     .progress{height:12px;background:rgba(255,255,255,0.03);border-radius:8px;flex:1;overflow:hidden}
     .bar{height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#7affd9);box-shadow:0 6px 18px rgba(0,255,204,0.04)}
 
-    /* Right sidebar */
+    /* sidebar */
     .sidebar{display:flex;flex-direction:column;gap:12px}
     .input-row{display:flex;gap:8px}
     input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-family:inherit}
     button{padding:10px 12px;border-radius:8px;border:0;background:linear-gradient(180deg,#0fffcf 0%,#17cba7 100%);cursor:pointer;color:#021;font-weight:600}
     .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);font-weight:600}
-
-    /* modules */
-    .module{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-    .module h4{margin:0 0 8px 0}
-    .sample-list{display:flex;flex-wrap:wrap;gap:8px}
     .chip{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,0.02);cursor:pointer;font-size:13px}
 
-    /* modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,0.5),rgba(0,0,0,0.7))}
-    .modal.show{display:flex}
-    .modal-card{width:680px;background:linear-gradient(180deg,#081018,#051019);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+    /* console input */
+    .cmd-input{display:flex;gap:8px;margin-top:8px}
+    .cmd{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#02040a;color:inherit;font-family:inherit}
+
+    /* panels */
+    .row{display:flex;gap:12px}
+    .module{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+
+    /* logs */
+    .logs{max-height:140px;overflow:auto;background:#02040a;padding:10px;border-radius:8px;font-family:ui-monospace;font-size:13px}
+
+    /* codex */
+    .codex{max-height:220px;overflow:auto;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);font-size:13px}
+
+    /* audio toggle */
+    .toggle{display:flex;align-items:center;gap:8px}
 
     /* small screens */
     @media(max-width:980px){.wrap{grid-template-columns:1fr;}.sidebar{order:2}}
 
-    /* ---- cinematic & glitch accents ---- */
+    /* effects */
     .glitch{position:relative}
-    .glitch::before,.glitch::after{content:"";position:absolute;inset:0;border-radius:8px;mix-blend-mode:screen;opacity:0.06;pointer-events:none}
+    .glitch::before,.glitch::after{content:"";position:absolute;inset:0;border-radius:8px;mix-blend-mode:screen;opacity:0.04;pointer-events:none}
     .glitch::before{transform:translate(2px,-2px);background:linear-gradient(90deg,#39ffca,#7bf1ff)}
     .glitch::after{transform:translate(-2px,2px);background:linear-gradient(90deg,#ff83a6,#fffb85)}
     .flicker{animation:flicker 6s linear infinite}
     @keyframes flicker{0%,97%{opacity:1}98%{opacity:.5}99%{opacity:.95}}
 
-    /* tiny terminal cursor */
-    .cursor{display:inline-block;width:8px;height:14px;background:var(--accent);margin-left:6px;vertical-align:middle;animation:blink 1s steps(2) infinite}
-    @keyframes blink{50%{opacity:0}}
+    /* particle canvas overlay */
+    #particleCanvas{position:absolute;inset:0;pointer-events:none}
 
   </style>
 </head>
@@ -72,7 +79,7 @@
     <main class="panel console">
       <header>
         <div class="logo"><span class="mark">PANACEA</span> PRIME — <small class="muted">Artificial Intelligence Cure Matrix</small></div>
-        <div style="margin-left:auto;text-align:right" class="meta">V.9.0.2 <span style="opacity:.6">|</span> QUANTUM STABLE</div>
+        <div style="margin-left:auto;text-align:right" class="meta">V.9.1 <span style="opacity:.6">|</span> QUANTUM STABLE</div>
       </header>
 
       <div class="status-row">
@@ -83,8 +90,9 @@
         </div>
       </div>
 
-      <section class="panel terminal glitch flicker" id="terminal">
-        <div class="stream" id="stream" aria-live="polite"></div>
+      <section class="panel terminal glitch flicker" id="terminal" aria-live="polite" aria-atomic="false">
+        <canvas id="particleCanvas"></canvas>
+        <div class="stream" id="stream"></div>
       </section>
 
       <div class="progress-wrap">
@@ -93,10 +101,22 @@
         <div style="width:120px;text-align:right" class="meta" id="progressText">0%</div>
       </div>
 
-      <div style="display:flex;gap:10px;align-items:center">
-        <button class="btn-ghost" id="btnLore">IN-UNIVERSE LORE</button>
-        <button class="btn-ghost" id="btnModules">MODULES</button>
-        <div style="margin-left:auto" class="meta">Clearance: <strong>HELIO‑7</strong></div>
+      <div class="row">
+        <div style="flex:1;display:flex;gap:8px;align-items:center">
+          <button class="btn-ghost" id="btnLore">IN-UNIVERSE LORE</button>
+          <button class="btn-ghost" id="btnModules">MODULES</button>
+          <div style="margin-left:auto" class="meta">Clearance: <strong>HELIO‑7</strong></div>
+        </div>
+        <div style="width:320px;display:flex;flex-direction:column;gap:8px">
+          <div class="module" style="display:flex;justify-content:space-between;align-items:center">
+            <div class="meta">Audio</div>
+            <div class="toggle"><label><input id="audioToggle" type="checkbox"> Enable</label></div>
+          </div>
+          <div class="module">
+            <div class="meta">System Log</div>
+            <div class="logs" id="sessionLogs"></div>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -108,7 +128,11 @@
           <input id="affInput" type="text" placeholder="Enter affliction ID (eg. VX-94)" aria-label="Affliction ID">
           <button id="runBtn">ANALYZE</button>
         </div>
-        <div style="margin-top:8px;font-size:13px;color:var(--muted)">No real-world medical claims. This is fictional simulation content.</div>
+        <div class="cmd-input">
+          <input id="cmdInput" class="cmd" placeholder="Type commands: /help, /scan VX-94, /logs, /codex" aria-label="Console command">
+          <button id="cmdRun" class="btn-ghost">RUN</button>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:var(--muted)">Fictional content only. No medical claims. Use console commands to explore.</div>
       </div>
 
       <div class="module">
@@ -118,7 +142,7 @@
 
       <div class="module">
         <h4>Quick Controls</h4>
-        <div style="display:flex;gap:8px"><button id="btnRandom" class="btn-ghost">RANDOM RUN</button><button id="btnBreach" class="btn-ghost">SIMULATE BREACH</button></div>
+        <div style="display:flex;gap:8px"><button id="btnRandom" class="btn-ghost">RANDOM RUN</button><button id="btnBreach" class="btn-ghost">SIMULATE BREACH</button><button id="btnReset" class="btn-ghost">RESET LOGS</button></div>
       </div>
 
       <div class="module">
@@ -127,7 +151,13 @@
           <div class="chip" id="mDiag">Diagnostics</div>
           <div class="chip" id="mSynth">Synthesis</div>
           <div class="chip" id="mContain">Containment</div>
+          <div class="chip" id="mStab">Stability Matrix</div>
         </div>
+      </div>
+
+      <div class="module">
+        <h4>Codex (discovered)</h4>
+        <div class="codex" id="codex"></div>
       </div>
 
     </aside>
@@ -140,7 +170,7 @@
       <div style="display:grid;grid-template-columns:1fr 200px;gap:12px;margin-top:12px">
         <div>
           <p><strong>Operator Notes:</strong> PANACEA PRIME was developed under Project Helios to model emergent synthetic pathologies and propose theoretical remediation pathways. All outputs are fictional.</p>
-          <p><em>Directive 12‑A:</em> Under no circumstances shall PANACEA PRIME be used to make real clinical decisions without rigorous validation.</p>
+          <p><em>Directive 12‑A:</em> Under no circumstances shall PANACEA PRIME be used to make real clinical decisions without rigorous validation. This interface contains hidden logs and story markers.</p>
         </div>
         <div>
           <ul class="meta" style="margin:0;padding-left:18px">
@@ -155,24 +185,27 @@
   </div>
 
   <script>
-    // ------------------ Fictional afflictions DB ------------------
-    const AFFLICTIONS = [
-      {id:'VX-94', name:'Synthetic Neuro-Disruptor Virus', severity:'Critical', key:'GAMMA-3X'},
-      {id:'OBL-3', name:'Obsidian Bone Lattice Syndrome', severity:'High', key:'OBLX/77'},
-      {id:'EKO-N1', name:'Quantum Echo Parasitic Loop', severity:'High', key:'EKO::N1'},
-      {id:'SYN-0', name:'Synaptic Null Collapse', severity:'Medium', key:'SYN0-NA'},
-      {id:'PLASM-A', name:'Plasmatic Drift Affliction', severity:'Low', key:'PLSMA-A'},
-      {id:'NEX-11', name:'Nexis Protein Misfold', severity:'Medium', key:'NEX11-AL'},
-      {id:'TH-DELTA', name:'Thermal Delamination Syndrome', severity:'Low', key:'THD-12'},
-      {id:'ARC-4', name:'Arcogenic Cellular Fuse', severity:'High', key:'ARC-4Z'},
-      {id:'LUC-9', name:'Lucent Membrane Erosion', severity:'Critical', key:'L9-ME'},
-      {id:'QX-VOID', name:'Quantum Void Residue', severity:'Unknown', key:'QX-VOID'},
-      {id:'Z-ORBIT', name:'Zero-Orbit Viral Spiral', severity:'High', key:'ZORB/9'},
-      {id:'HYDRA-02', name:'Hydra Polymorphic Syndrome', severity:'Medium', key:'HYD02'},
-      {id:'MIR-7', name:'Mirror-Phase Contagion', severity:'Critical', key:'MIR7-REF'},
-      {id:'IONIC', name:'Ionic Cascade Decay', severity:'Medium', key:'ION-CASCADE'},
-      {id:'PRSM-5', name:'Prismogenic Replicant Malady', severity:'Low', key:'PR5'},
-    ];
+    /* ---------------- Data: expanded affliction DB ---------------- */
+    const AFFLICTIONS = (function(){
+      const base = [
+        ['VX-94','Synthetic Neuro-Disruptor Virus','Critical'],['OBL-3','Obsidian Bone Lattice Syndrome','High'],['EKO-N1','Quantum Echo Parasitic Loop','High'],
+        ['SYN-0','Synaptic Null Collapse','Medium'],['PLASM-A','Plasmatic Drift Affliction','Low'],['NEX-11','Nexis Protein Misfold','Medium'],
+        ['TH-DELTA','Thermal Delamination Syndrome','Low'],['ARC-4','Arcogenic Cellular Fuse','High'],['LUC-9','Lucent Membrane Erosion','Critical'],
+        ['QX-VOID','Quantum Void Residue','Unknown'],['Z-ORBIT','Zero-Orbit Viral Spiral','High'],['HYDRA-02','Hydra Polymorphic Syndrome','Medium'],
+        ['MIR-7','Mirror-Phase Contagion','Critical'],['IONIC','Ionic Cascade Decay','Medium'],['PRSM-5','Prismogenic Replicant Malady','Low']
+      ];
+      // generate additional synthetic entries programmatically for discovery
+      for(let i=16;i<=120;i++){
+        const id = 'GEN-' + (i).toString().padStart(3,'0');
+        base.push([id,'Generated Pathology '+i, ['Low','Medium','High','Critical'][Math.floor(Math.random()*4)]]);
+      }
+      return base.map((a,idx)=>({id:a[0],name:a[1],severity:a[2],key:generateKey(a[0],idx)}));
+    })();
+
+    function generateKey(id,idx){
+      const pref = ['GEN','CYT','MOX','HEX','ALP','QNT'][idx%6];
+      return pref+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+    }
 
     // DOM refs
     const stream = document.getElementById('stream');
@@ -185,149 +218,79 @@
     const samples = document.getElementById('samples');
     const btnRandom = document.getElementById('btnRandom');
     const btnBreach = document.getElementById('btnBreach');
+    const btnReset = document.getElementById('btnReset');
     const modalLore = document.getElementById('modalLore');
     const btnLore = document.getElementById('btnLore');
     const closeLore = document.getElementById('closeLore');
-    const btnModules = document.getElementById('btnModules');
+    const sessionLogs = document.getElementById('sessionLogs');
+    const codexEl = document.getElementById('codex');
+    const cmdInput = document.getElementById('cmdInput');
+    const cmdRun = document.getElementById('cmdRun');
+    const audioToggle = document.getElementById('audioToggle');
+    const particleCanvas = document.getElementById('particleCanvas');
+
+    // audio sources (tiny synthesized) — optional
+    const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    function beep(freq, time=0.08){ if(!audioToggle.checked) return; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type='sine'; o.frequency.value=freq; g.gain.value=0.02; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + time); }
+    function alarm(){ if(!audioToggle.checked) return; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type='sawtooth'; o.frequency.value=440; g.gain.value=0.06; o.connect(g); g.connect(audioCtx.destination); o.start(); setTimeout(()=>{o.frequency.value=220},120); setTimeout(()=>{o.stop()},600); }
+
+    // particles
+    const ctx = particleCanvas.getContext('2d'); function resizeCanvas(){ particleCanvas.width = particleCanvas.clientWidth; particleCanvas.height = particleCanvas.clientHeight; }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+    const particles = Array.from({length:60}).map(()=>({x:Math.random()*particleCanvas.width,y:Math.random()*particleCanvas.height, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, r:Math.random()*1.4+0.4}));
+    function drawParticles(){ ctx.clearRect(0,0,particleCanvas.width,particleCanvas.height); particles.forEach(p=>{p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=particleCanvas.width; if(p.x>particleCanvas.width) p.x=0; if(p.y<0) p.y=particleCanvas.height; if(p.y>particleCanvas.height) p.y=0; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(60,240,200,0.05)'; ctx.fill(); }); requestAnimationFrame(drawParticles);} drawParticles();
+
+    // logs + persistence
+    const LOG_KEY = 'panacea_session_logs_v1';
+    function readLogs(){ try{return JSON.parse(localStorage.getItem(LOG_KEY)||'[]')}catch(e){return[]} }
+    function pushLog(entry){ const logs = readLogs(); logs.push(entry); localStorage.setItem(LOG_KEY, JSON.stringify(logs)); renderLogs(); }
+    function renderLogs(){ const logs = readLogs(); sessionLogs.innerHTML = logs.slice(-20).map(l=>`<div><small class="muted">${l.t}</small> — ${l.msg}</div>`).join(''); }
+    function resetLogs(){ localStorage.removeItem(LOG_KEY); renderLogs(); }
+    renderLogs();
+
+    // codex persistence
+    const CODEX_KEY = 'panacea_codex_v1';
+    function readCodex(){ try{return JSON.parse(localStorage.getItem(CODEX_KEY)||'{}')}catch(e){return{}} }
+    function addCodex(id,meta){ const c = readCodex(); c[id]=meta; localStorage.setItem(CODEX_KEY, JSON.stringify(c)); renderCodex(); }
+    function renderCodex(){ const c = readCodex(); codexEl.innerHTML = Object.keys(c).slice(-30).map(k=>`<div><strong>${k}</strong> — <small class="muted">${c[k].severity}</small><div style="font-size:12px;color:rgba(166,247,224,0.8)">${c[k].name}</div></div><hr style="opacity:.06"/>`).join('') }
+    renderCodex();
 
     // populate sample chips
-    AFFLICTIONS.forEach(a=>{
-      const el = document.createElement('div'); el.className='chip'; el.textContent=a.id; el.title=a.name;
-      el.addEventListener('click', ()=>{affInput.value=a.id; runAnalysis(a.id)});
-      samples.appendChild(el);
-    });
+    AFFLICTIONS.slice(0,24).forEach(a=>{ const el=document.createElement('div'); el.className='chip'; el.textContent=a.id; el.title=a.name; el.addEventListener('click', ()=>{ affInput.value=a.id; startAnalysis(a.id); }); samples.appendChild(el); });
 
-    // Utility: append line with optional delay
-    function appendLine(text, cls){
-      const node = document.createElement('div'); node.className='line '+(cls||''); node.textContent = text; stream.appendChild(node); stream.scrollTop = stream.scrollHeight; return node;
-    }
+    function appendLine(text,cls){ const node = document.createElement('div'); node.className='line '+(cls||''); node.textContent = text; stream.appendChild(node); stream.scrollTop = stream.scrollHeight; return node; }
 
     function randomInt(max){return Math.floor(Math.random()*max)}
 
-    // Fake progress simulation
-    async function fakeProgress(duration = 2500, onUpdate){
-      const start = performance.now();
-      return new Promise(resolve=>{
-        function tick(now){
-          const t = Math.min(1,(now-start)/duration);
-          const eased = Math.pow(t,0.7);
-          const pct = Math.floor(eased*100);
-          bar.style.width = pct + '%';
-          progressText.textContent = pct + '%';
-          if(onUpdate) onUpdate(pct);
-          if(t<1) requestAnimationFrame(tick); else resolve();
-        }
-        requestAnimationFrame(tick);
-      })
-    }
+    async function fakeProgress(duration = 2500, onUpdate){ const start = performance.now(); return new Promise(resolve=>{ function tick(now){ const t = Math.min(1,(now-start)/duration); const eased = Math.pow(t,0.7); const pct = Math.floor(eased*100); bar.style.width = pct + '%'; progressText.textContent = pct + '%'; if(onUpdate) onUpdate(pct); if(t<1) requestAnimationFrame(tick); else resolve(); } requestAnimationFrame(tick); }) }
 
-    // Main analysis flow
-    async function runAnalysis(target){
-      // clear small bits
-      appendLine('INPUT: ' + target, 'muted');
-      // simulate variable latency
-      const latency = 8 + randomInt(60);
-      latEl.textContent = latency + 'ms';
+    // core: analysis with modules, consequences, codex unlocks
+    async function analyzeAffliction(target, options={modules:['Diagnostics']}){
+      const ts = new Date().toLocaleString(); pushLog({t:ts,msg:`Scan initiated: ${target}`}); appendLine('INPUT: ' + target,'muted'); beep(880,0.06);
+      const latency = 8 + randomInt(60); latEl.textContent = latency + 'ms'; scenariosEl.textContent = (Number(scenariosEl.textContent.replace(/,/g,'')) + randomInt(300)+10).toLocaleString();
+      appendLine('\n[INITIALIZING MODULES] — ' + options.modules.join(', ')); await fakeProgress(900);
 
-      // scenario bump
-      const current = Number(scenariosEl.textContent.replace(/,/g,'')) || 14000605;
-      scenariosEl.textContent = (current + randomInt(300)+10).toLocaleString();
+      appendLine('[STATUS] Neural vector cores: ONLINE'); await new Promise(r=>setTimeout(r,120));
+      appendLine('[ANALYZER] Parsing Affliction ID...'); await fakeProgress(900);
 
-      // begin log
-      appendLine('\n[INITIALIZING MODULES] — Loading vectorizers, molecular lattice map, cross-reference index.');
-      await fakeProgress(1100);
-      appendLine('[STATUS] Neural vector cores: ONLINE');
-      await new Promise(r=>setTimeout(r,220));
-
-      // analyze pattern
-      appendLine('[ANALYZER] Parsing Affliction ID...');
-      await fakeProgress(900);
-
-      // find affliction
       const found = AFFLICTIONS.find(a=>a.id.toLowerCase()===target.toLowerCase());
-      if(!found){
-        // unknown path: randomized creative output
-        appendLine('\n[RESULT] Affliction not catalogued. Generating hypothetical model...');
-        await fakeProgress(1200);
-        const seed = Math.random().toString(36).slice(2,8).toUpperCase();
-        appendLine('HYPOTHETICAL PATHWAY ID: ' + seed);
-        appendLine('MOLECULAR KEY: ' + (['PR-','GX-','QX-','AL-'][randomInt(4)]) + randomInt(9999));
-        appendLine('\nSuggested containment: ' + (['ISOLATE SECTOR','SYNTHETIC STABILIZATION','PHASED DISPLACEMENT'][randomInt(3)]));
-        appendLine('\n[NOTE] This result is a simulation. No clinical validity.');
-        await new Promise(r=>setTimeout(r,300));
-        bar.style.width = '100%'; progressText.textContent='100%';
-        return;
-      }
+      if(!found){ // unknown
+        appendLine('\n[RESULT] Affliction not catalogued. Generating hypothetical model...'); await fakeProgress(1200);
+        const seed = Math.random().toString(36).slice(2,8).toUpperCase(); appendLine('HYPOTHETICAL PATHWAY ID: ' + seed); appendLine('MOLECULAR KEY: ' + (['PR-','GX-','QX-','AL-'][randomInt(4)]) + randomInt(9999));
+        appendLine('\nSuggested containment: ' + (['ISOLATE SECTOR','SYNTHETIC STABILIZATION','PHASED DISPLACEMENT'][randomInt(3)])); appendLine('\n[NOTE] This result is a simulation. No clinical validity.'); bar.style.width='100%'; progressText.textContent='100%'; pushLog({t:ts,msg:`Hypothetical model generated for ${target}`}); return {id:target,unknown:true}; }
 
-      // if found, produce rich diegetic output
-      appendLine('\n[AFFLICTION] ' + found.id + ' — ' + found.name);
-      appendLine('[SEVERITY] ' + found.severity + ' — Cross-reference: ' + (Math.random()>0.6? 'ARCHIVE MATCH: ' + AFFLICTIONS[randomInt(AFFLICTIONS.length)].id : 'NO DIRECT MATCH'));
-      await fakeProgress(1400, pct=>{
-        // mid-run streaming facts
-        if(pct>25 && pct<35 && !document.getElementById('fact1')){
-          const n = appendLine('[STREAM] Cross-linking protein topologies...'); n.id='fact1';
-        }
-        if(pct>60 && pct<70 && !document.getElementById('fact2')){
-          const n = appendLine('[STREAM] Computing entropic correction factors...'); n.id='fact2';
-        }
-      });
+      appendLine('\n[AFFLICTION] ' + found.id + ' — ' + found.name); appendLine('[SEVERITY] ' + found.severity + ' — Cross-reference: ' + (Math.random()>0.6? 'ARCHIVE MATCH: ' + AFFLICTIONS[randomInt(AFFLICTIONS.length)].id : 'NO DIRECT MATCH'));
 
-      // present molecular key + cure path (fictional)
-      const keys = ['GEN-','CYT-','MOX-','HEX-'];
-      const mk = keys[randomInt(keys.length)] + Math.random().toString(36).slice(2,6).toUpperCase();
-      appendLine('\n[OPTIMAL PATH FOUND] — MOLECULAR KEY: ' + mk);
-      appendLine('[SYNTHESIS] Construct composite agent using:');
-      appendLine('  - Lattice scaffold: ' + (['ALPHA','OMEGA','SIGMA'][randomInt(3)]));
-      appendLine('  - Reactive tag: ' + (['Hydroxyl','Amino','Phasic'][randomInt(3)]));
-      appendLine('  - Temporal vector: T+'+ (10 + randomInt(400)) +'ms');
+      // mid-run streaming
+      await fakeProgress(1400,pct=>{ if(pct>25 && pct<35 && !document.getElementById('fact1')){ const n=appendLine('[STREAM] Cross-linking protein topologies...'); n.id='fact1'; } if(pct>60 && pct<70 && !document.getElementById('fact2')){ const n=appendLine('[STREAM] Computing entropic correction factors...'); n.id='fact2'; } });
 
-      // optional animated success
-      await fakeProgress(800);
-      appendLine('\n[CONTAINMENT] Recommended: ' + (found.severity==='Critical' ? 'Immediate global quarantine; deploy synthesis units.' : 'Local isolation; deploy adaptive synthesis.' ));
-      appendLine('\n[REPORT] Delivery packet: PANACEA::' + mk + ' (encrypted)');
-      appendLine('\n[NOTE] Simulation complete. All signatures logged.');
+      // simulate modules effects
+      if(options.modules.includes('Synthesis')){ appendLine('\n[SYNTHESIS] Generating composite agent fragments...'); await fakeProgress(900); appendLine('  - Fragment A: ' + (['ALPHA','BETA','OMEGA'][randomInt(3)])); appendLine('  - Tag: ' + (['Hydroxyl','Amino','Phasic'][randomInt(3)])); }
+      if(options.modules.includes('Containment')){ appendLine('\n[CONTAINMENT] Running containment simulation...'); await fakeProgress(700); appendLine('Containment score: ' + (50+randomInt(50)) + '/100'); }
+      if(options.modules.includes('Stability')){ appendLine('\n[STABILITY] Stability matrix computed — Eigenflux nominal.'); await fakeProgress(600); }
 
-      bar.style.width = '100%'; progressText.textContent='100%';
-    }
+      const keys = ['GEN-','CYT-','MOX-','HEX-']; const mk = keys[randomInt(keys.length)] + Math.random().toString(36).slice(2,6).toUpperCase(); appendLine('\n[OPTIMAL PATH FOUND] — MOLECULAR KEY: ' + mk);
+      appendLine('[REPORT] Delivery packet: PANACEA::' + mk + ' (encrypted)'); appendLine('\n[NOTE] Simulation complete.'); bar.style.width='100%'; progressText.textContent='100%'; pushLog({t:ts,msg:`Analysis complete: ${found.id} (${found.severity})`});
 
-    // Bind UI
-    runBtn.addEventListener('click', ()=>{ const t = affInput.value.trim(); if(!t) { appendLine('[ERROR] No input supplied. Try a sample affliction ID.','muted'); return } ; stream.innerHTML=''; bar.style.width='0%'; progressText.textContent='0%'; runAnalysis(t); });
-    btnRandom.addEventListener('click', ()=>{ const a = AFFLICTIONS[randomInt(AFFLICTIONS.length)]; affInput.value=a.id; stream.innerHTML=''; bar.style.width='0%'; progressText.textContent='0%'; runAnalysis(a.id); });
-
-    btnBreach.addEventListener('click', ()=>{
-      stream.innerHTML=''; appendLine('[ALERT] Unauthorized signature detected — SIMULATED BREACH MODE');
-      appendLine('[SECURITY] Initiating lockdown...');
-      // cinematic breach
-      let steps = ['Firing countermeasures','Rerouting containment corridors','Shredding non-essential indexes','Wiping volatile caches'];
-      (async ()=>{
-        for(let s of steps){ appendLine('[BREACH] ' + s); await fakeProgress(700); }
-        appendLine('[SYSTEM] Containment: REESTABLISHED');
-        bar.style.width='100%'; progressText.textContent='100%';
-      })();
-    });
-
-    // modal lore
-    btnLore.addEventListener('click', ()=>{modalLore.classList.add('show')});
-    closeLore.addEventListener('click', ()=>{modalLore.classList.remove('show')});
-
-    // modules toggle (simple)
-    document.getElementById('mDiag').addEventListener('click', ()=>{ appendLine('[MODULE] Diagnostics engaged — Live telemetry streaming...'); });
-    document.getElementById('mSynth').addEventListener('click', ()=>{ appendLine('[MODULE] Synthesis queued — Simulating molecular assembly...'); });
-    document.getElementById('mContain').addEventListener('click', ()=>{ appendLine('[MODULE] Containment protocols active — Pressure valves nominal'); });
-
-    // small accessibility niceties
-    affInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ runBtn.click(); } });
-
-    // initial welcome
-    (async ()=>{
-      appendLine('PANACEA PRIME — Boot sequence complete.');
-      appendLine('[NOTICE] This interface is fictional—no medical claims implied.');
-      appendLine('\nAwaiting target input...');
-    })();
-
-    // keyboard easter: press M to trigger modules modal
-    window.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='m'){ document.getElementById('mDiag').click(); }});
-
-  </script>
-</body>
-</html>
+      // codex unlock logic: discover on first analysis
+      const codex = readCodex(); if(!codex[found.id]){ addCodex(found.id,{name:found.name,severity:found.severity,key:found.key}); pushLog({t:ts,msg:`Codex entry unlocked: ${found.id}`}); beep(660,0.06); }
