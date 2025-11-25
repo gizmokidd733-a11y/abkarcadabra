@@ -1,664 +1,333 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panacea Prime | AI Cure Synthesis</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --neon-purple: #b026ff;
-            --neon-blue: #00f3ff;
-            --bg-dark: #050505;
-            --panel-bg: rgba(10, 10, 15, 0.9);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PANACEA PRIME — Enhanced</title>
+  <style>
+    /* ---- Base layout ---- */
+    :root{--bg:#07080b;--panel:#0f1720;--accent:#39ffca;--muted:#95a0b3;--danger:#ff4d6d}
+    *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{background:radial-gradient(1200px 600px at 10% 10%, rgba(10,14,22,0.6), transparent),linear-gradient(180deg,#04101a 0%, #060612 40%),var(--bg);color:#e6eef6}
+    .wrap{max-width:1100px;margin:28px auto;padding:22px;display:grid;grid-template-columns:1fr 420px;gap:20px}
+    header{display:flex;align-items:center;gap:14px}
+    .logo{font-weight:700;letter-spacing:1px}
+    .logo .mark{color:var(--accent);font-family:monospace}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(2,6,12,0.7);border:1px solid rgba(255,255,255,0.03)}
 
-        body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Share Tech Mono', monospace;
-            overflow-x: hidden;
-            overflow-y: hidden;
-        }
+    /* ---- Left (main console) ---- */
+    .console{min-height:540px;padding:18px;display:flex;flex-direction:column;gap:12px}
+    .status-row{display:flex;align-items:center;gap:12px}
+    .status-dot{width:12px;height:12px;border-radius:50%}
+    .status-online{background:linear-gradient(180deg,#36f0b2,#00b388);box-shadow:0 0 14px rgba(57,255,202,0.12)}
+    .meta{color:var(--muted);font-size:13px}
 
-        /* CRT Scanline Overlay */
-        .crt-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
+    .terminal{background:#04060a;border-radius:8px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;color:#a6f7e0;min-height:360px;overflow:hidden;position:relative}
+    .terminal .stream{height:100%;overflow:auto;padding-right:8px}
+    .line{white-space:pre-wrap;font-size:13px;line-height:1.45}
+    .muted{color:rgba(166,247,224,0.55)}
 
-        /* Moving Cyber Grid Background */
-        .perspective-grid {
-            position: fixed;
-            bottom: -50%;
-            left: -50%;
-            width: 200%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(176, 38, 255, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(176, 38, 255, 0.3) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: grid-move 10s linear infinite;
-            z-index: -1;
-            opacity: 0.2;
-            mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
-        }
+    /* progress */
+    .progress-wrap{display:flex;align-items:center;gap:10px}
+    .progress{height:12px;background:rgba(255,255,255,0.03);border-radius:8px;flex:1;overflow:hidden}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,#00ffcc,#7affd9);box-shadow:0 6px 18px rgba(0,255,204,0.04)}
 
-        @keyframes grid-move {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
-        }
+    /* Right sidebar */
+    .sidebar{display:flex;flex-direction:column;gap:12px}
+    .input-row{display:flex;gap:8px}
+    input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-family:inherit}
+    button{padding:10px 12px;border-radius:8px;border:0;background:linear-gradient(180deg,#0fffcf 0%,#17cba7 100%);cursor:pointer;color:#021;font-weight:600}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);font-weight:600}
 
-        /* Typography */
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
-        }
+    /* modules */
+    .module{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+    .module h4{margin:0 0 8px 0}
+    .sample-list{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,0.02);cursor:pointer;font-size:13px}
 
-        .neon-text-purple {
-            text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple);
-            color: #e0aaff;
-        }
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,0.5),rgba(0,0,0,0.7))}
+    .modal.show{display:flex}
+    .modal-card{width:680px;background:linear-gradient(180deg,#081018,#051019);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
 
-        .neon-text-blue {
-            text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
-            color: #ccfcff;
-        }
+    /* small screens */
+    @media(max-width:980px){.wrap{grid-template-columns:1fr;}.sidebar{order:2}}
 
-        /* Glitch Effect */
-        .glitch-wrapper {
-            position: relative;
-        }
-        .glitch {
-            position: relative;
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-dark);
-            opacity: 0.8;
-        }
-        .glitch::before {
-            left: 2px;
-            text-shadow: -1px 0 #ff00de;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px;
-            text-shadow: -1px 0 #00f3ff;
-            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
-        
-        @keyframes glitch-anim-1 {
-            0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
-            20% { clip-path: inset(60% 0 10% 0); transform: translate(1px, -1px); }
-            40% { clip-path: inset(40% 0 50% 0); transform: translate(-1px, 2px); }
-            60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
-            80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
-            100% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
-        }
-        @keyframes glitch-anim-2 {
-            0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
-            20% { clip-path: inset(80% 0 5% 0); transform: translate(-1px, 2px); }
-            40% { clip-path: inset(30% 0 20% 0); transform: translate(1px, -2px); }
-            60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 1px); }
-            80% { clip-path: inset(50% 0 10% 0); transform: translate(2px, -1px); }
-            100% { clip-path: inset(20% 0 40% 0); transform: translate(-1px, 2px); }
-        }
+    /* ---- cinematic & glitch accents ---- */
+    .glitch{position:relative}
+    .glitch::before,.glitch::after{content:"";position:absolute;inset:0;border-radius:8px;mix-blend-mode:screen;opacity:0.06;pointer-events:none}
+    .glitch::before{transform:translate(2px,-2px);background:linear-gradient(90deg,#39ffca,#7bf1ff)}
+    .glitch::after{transform:translate(-2px,2px);background:linear-gradient(90deg,#ff83a6,#fffb85)}
+    .flicker{animation:flicker 6s linear infinite}
+    @keyframes flicker{0%,97%{opacity:1}98%{opacity:.5}99%{opacity:.95}}
 
-        /* The AI Chip Visualization */
-        .chip-container {
-            width: 150px;
-            height: 150px;
-            background: #0a0a0a;
-            border: 1px solid var(--neon-purple);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.2), inset 0 0 20px rgba(176, 38, 255, 0.1);
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
+    /* tiny terminal cursor */
+    .cursor{display:inline-block;width:8px;height:14px;background:var(--accent);margin-left:6px;vertical-align:middle;animation:blink 1s steps(2) infinite}
+    @keyframes blink{50%{opacity:0}}
 
-        .chip-container::before {
-            content: '';
-            position: absolute;
-            inset: -5px;
-            border: 2px dashed var(--neon-blue);
-            animation: rotate 10s linear infinite;
-            opacity: 0.5;
-        }
-
-        .chip-core {
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, var(--neon-purple), #220033);
-            border-radius: 50%;
-            box-shadow: 0 0 25px var(--neon-purple);
-            animation: pulse 3s infinite ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            z-index: 20;
-        }
-
-        /* Rotating Rings around core */
-        .chip-ring {
-            position: absolute;
-            border: 1px solid var(--neon-blue);
-            border-radius: 50%;
-            opacity: 0.3;
-        }
-        .ring-1 { width: 90px; height: 90px; border-left-color: transparent; animation: rotate 4s linear infinite reverse; }
-        .ring-2 { width: 120px; height: 120px; border-top-color: transparent; border-bottom-color: transparent; animation: rotate 7s linear infinite; }
-
-        .chip-active .chip-container {
-            box-shadow: 0 0 50px rgba(0, 243, 255, 0.4), inset 0 0 30px rgba(0, 243, 255, 0.2);
-            border-color: var(--neon-blue);
-        }
-        
-        .chip-active .chip-core {
-            animation: rapidPulse 0.2s infinite alternate;
-            background: radial-gradient(circle, #fff, var(--neon-blue));
-            box-shadow: 0 0 50px var(--neon-blue), 0 0 80px white;
-            color: black;
-        }
-
-        /* Animations */
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
-        @keyframes rapidPulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
-        @keyframes scanline { 0% { top: -20%; } 100% { top: 120%; } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* UI Elements */
-        .glass-panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            position: relative;
-        }
-        
-        .glass-panel::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-            opacity: 0.5;
-        }
-
-        .input-field {
-            background: rgba(0,0,0,0.7);
-            border: 1px solid #333;
-            border-bottom: 2px solid var(--neon-purple);
-            color: var(--neon-blue);
-            font-family: 'Share Tech Mono', monospace;
-            transition: 0.3s;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-        }
-
-        .cyber-btn {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-        }
-
-        .cyber-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-blue);
-        }
-        
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            transition: 0.5s;
-        }
-        
-        .cyber-btn:hover::before {
-            left: 100%;
-        }
-
-        .cyber-btn:disabled {
-            border-color: #333;
-            color: #555;
-            cursor: not-allowed;
-            box-shadow: none;
-            background: transparent;
-        }
-
-        /* Terminal/Log Styling */
-        .terminal-window {
-            height: 250px;
-            overflow-y: hidden;
-            border-left: 2px solid var(--neon-purple);
-            background: rgba(5, 5, 8, 0.95);
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-        }
-
-        .scan-line {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.1), transparent);
-            animation: scanline 3s linear infinite;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .log-entry {
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        .log-info { color: #888; }
-        .log-success { color: var(--neon-blue); text-shadow: 0 0 5px rgba(0,243,255,0.5); }
-        .log-warn { color: var(--neon-purple); }
-        .log-cursor::after {
-            content: '█';
-            animation: blink 1s step-end infinite;
-            color: var(--neon-blue);
-            margin-left: 2px;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            background: #111;
-            height: 4px;
-            width: 100%;
-            margin-top: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            background: var(--neon-purple);
-            width: 0%;
-            box-shadow: 0 0 15px var(--neon-purple);
-            transition: width 0.1s linear;
-            position: relative;
-        }
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0;
-            width: 5px;
-            background: white;
-            box-shadow: 0 0 10px white;
-        }
-    </style>
+  </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+<body>
+  <div class="wrap">
+    <main class="panel console">
+      <header>
+        <div class="logo"><span class="mark">PANACEA</span> PRIME — <small class="muted">Artificial Intelligence Cure Matrix</small></div>
+        <div style="margin-left:auto;text-align:right" class="meta">V.9.0.2 <span style="opacity:.6">|</span> QUANTUM STABLE</div>
+      </header>
 
-    <div class="crt-overlay"></div>
-    <div class="perspective-grid"></div>
-
-    <!-- Header / Brand -->
-    <header class="w-full max-w-5xl flex justify-between items-center mb-8 animate-fade-in-down z-10 relative">
-        <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-transparent border-2 border-purple-600 rounded-sm transform rotate-45 flex items-center justify-center shadow-[0_0_15px_rgba(176,38,255,0.5)]">
-                <div class="w-6 h-6 bg-cyan-400 opacity-80"></div>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-white tracking-widest glitch-wrapper">
-                    <span class="glitch" data-text="PANACEA PRIME">PANACEA PRIME</span>
-                </h1>
-                <p class="text-[10px] text-cyan-400 tracking-[0.6em] uppercase opacity-80">Artificial Intelligence Cure Matrix</p>
-            </div>
+      <div class="status-row">
+        <div class="status-dot status-online"></div>
+        <div>
+          <div><strong>System Status: ONLINE</strong></div>
+          <div class="meta">Latency: <span id="latency">12ms</span> — Scenarios simulated: <span id="scenarios">14,000,605</span></div>
         </div>
-        <div class="text-right hidden md:block font-mono">
-            <div class="text-xs text-purple-400 mb-1 flex items-center justify-end gap-2">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                SYSTEM STATUS: ONLINE
-            </div>
-            <div class="text-[10px] text-gray-500">SECURE CONNECTION ESTABLISHED</div>
-            <div class="text-[10px] text-cyan-400 mt-1">V.9.0.2 [QUANTUM STABLE]</div>
-        </div>
-    </header>
+      </div>
 
-    <!-- Main Interface -->
-    <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 z-10 relative">
-        
-        <!-- Left Panel: Input & Status -->
-        <div class="glass-panel p-8 rounded-none border-l-2 border-purple-600 flex flex-col items-center justify-center gap-8 relative overflow-hidden clip-corner" id="input-panel">
-            
-            <!-- Corner Accents -->
-            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
-            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
+      <section class="panel terminal glitch flicker" id="terminal">
+        <div class="stream" id="stream" aria-live="polite"></div>
+      </section>
 
-            <!-- The "Chip" Visual -->
-            <div id="ai-chip" class="chip-container rounded-full">
-                <div class="chip-ring ring-1"></div>
-                <div class="chip-ring ring-2"></div>
-                <div class="chip-core">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5c0-5.523 4.477-10 10-10z"></path><path d="M8.5 8.5v.01"></path><path d="M16 16v.01"></path><path d="M12 12v.01"></path></svg>
-                </div>
-                <!-- Circuit lines decoration -->
-                <div class="absolute w-full h-full border border-gray-700 opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 10px 10px;"></div>
-            </div>
+      <div class="progress-wrap">
+        <div class="meta">Simulation Progress</div>
+        <div class="progress" aria-hidden><div class="bar" id="bar"></div></div>
+        <div style="width:120px;text-align:right" class="meta" id="progressText">0%</div>
+      </div>
 
-            <div class="w-full space-y-6 z-10">
-                <div class="text-center mb-2">
-                    <h2 class="text-xl neon-text-purple tracking-widest">TARGET PATHOGEN</h2>
-                    <p class="text-xs text-gray-500 font-mono mt-1">INPUT BIOLOGICAL OR SYNTHETIC AFFLICTION ID</p>
-                </div>
-                
-                <div class="relative group">
-                    <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-cyan-400 rounded blur opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <input type="text" id="diseaseInput" placeholder="ENTER THREAT..." class="relative input-field w-full p-4 text-center text-lg tracking-widest uppercase bg-black text-cyan-400 placeholder-gray-700">
-                </div>
-                
-                <button onclick="startSequence()" id="initBtn" class="cyber-btn w-full py-5 font-bold text-lg group">
-                    <span class="group-hover:hidden flex items-center justify-center gap-2">
-                         INITIATE PREP TIME
-                    </span>
-                    <span class="hidden group-hover:inline-flex items-center justify-center gap-2">
-                        <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        ALLOCATING RESOURCES
-                    </span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Right Panel: The "Prep Time" Terminal -->
-        <div class="glass-panel p-6 rounded-none border-r-2 border-cyan-400 flex flex-col relative">
-            <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-2">
-                <h3 class="text-sm text-cyan-400 tracking-widest">COMPUTATION MATRIX</h3>
-                <span class="text-[10px] text-gray-500 animate-pulse border border-gray-700 px-2 py-0.5 rounded" id="system-state">STANDBY</span>
-            </div>
-
-            <!-- Terminal Output -->
-            <div id="terminal" class="terminal-window flex-1 p-4 font-mono text-xs flex flex-col justify-start overflow-hidden">
-                <div class="scan-line"></div>
-                <div id="log-content" class="space-y-1">
-                    <div class="log-entry log-info">> Neural Network initialized...</div>
-                    <div class="log-entry log-info">> Waiting for target input...</div>
-                </div>
-            </div>
-
-            <!-- Progress Indicator -->
-            <div class="mt-4 border-t border-gray-800 pt-4">
-                <div class="flex justify-between text-xs mb-2 font-mono">
-                    <span class="text-purple-400">SIMULATION PROGRESS</span>
-                    <span class="text-cyan-400 font-bold" id="percent-display">0%</span>
-                </div>
-                <div class="progress-container">
-                    <div id="progress-bar" class="progress-bar"></div>
-                </div>
-                <div class="flex justify-between text-[10px] text-gray-500 mt-2 font-mono uppercase">
-                    <span class="flex items-center gap-2">ACTIVE THREADS: <span id="thread-count" class="text-white">1</span></span>
-                    <span class="flex items-center gap-2">EST. TIME: <span id="eta-display" class="text-white">--</span></span>
-                </div>
-            </div>
-        </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-ghost" id="btnLore">IN-UNIVERSE LORE</button>
+        <button class="btn-ghost" id="btnModules">MODULES</button>
+        <div style="margin-left:auto" class="meta">Clearance: <strong>HELIO‑7</strong></div>
+      </div>
 
     </main>
 
-    <!-- Success Overlay -->
-    <div id="success-overlay" class="fixed inset-0 z-50 flex items-center justify-center hidden backdrop-blur-md bg-black bg-opacity-80">
-        <div class="bg-gray-900 border border-cyan-500 p-10 rounded-none max-w-lg w-full text-center shadow-[0_0_100px_rgba(0,243,255,0.2)] transform scale-0 transition-transform duration-300 relative overflow-hidden" id="success-card">
-            
-            <!-- Background detail for card -->
-            <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(0deg, transparent 24%, #00f3ff 25%, #00f3ff 26%, transparent 27%, transparent 74%, #00f3ff 75%, #00f3ff 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, #00f3ff 25%, #00f3ff 26%, transparent 27%, transparent 74%, #00f3ff 75%, #00f3ff 76%, transparent 77%, transparent); background-size: 50px 50px;"></div>
-
-            <div class="w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center mb-6 border-2 border-cyan-400 shadow-[0_0_30px_rgba(0,243,255,0.5)] relative z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-cyan-200 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-            </div>
-
-            <h2 class="text-4xl font-bold text-white mb-2 font-orbitron tracking-widest relative z-10 glitch-wrapper"><span class="glitch" data-text="CURE SYNTHESIZED">CURE SYNTHESIZED</span></h2>
-            <p class="text-cyan-100 mb-8 text-sm font-mono relative z-10">14,000,605 SCENARIOS SIMULATED. OPTIMAL PATH FOUND.</p>
-            
-            <div class="bg-black p-6 border border-gray-700 mb-8 relative z-10 group cursor-pointer hover:border-cyan-400 transition">
-                <div class="text-[10px] text-gray-500 mb-1 text-left">MOLECULAR KEY:</div>
-                <code class="text-cyan-400 text-xl font-bold tracking-widest break-all" id="cure-code">GENERATING...</code>
-            </div>
-
-            <button onclick="resetApp()" class="w-full bg-cyan-900 bg-opacity-50 hover:bg-cyan-600 text-cyan-100 border border-cyan-500 font-bold py-4 transition shadow-[0_0_20px_rgba(0,243,255,0.2)] hover:shadow-[0_0_40px_rgba(0,243,255,0.6)] relative z-10 uppercase tracking-widest">
-                EXTRACT DATA PROTOCOL
-            </button>
+    <aside class="panel sidebar">
+      <div class="module">
+        <h4>Target Input</h4>
+        <div class="input-row">
+          <input id="affInput" type="text" placeholder="Enter affliction ID (eg. VX-94)" aria-label="Affliction ID">
+          <button id="runBtn">ANALYZE</button>
         </div>
+        <div style="margin-top:8px;font-size:13px;color:var(--muted)">No real-world medical claims. This is fictional simulation content.</div>
+      </div>
+
+      <div class="module">
+        <h4>Sample Afflictions</h4>
+        <div class="sample-list" id="samples"></div>
+      </div>
+
+      <div class="module">
+        <h4>Quick Controls</h4>
+        <div style="display:flex;gap:8px"><button id="btnRandom" class="btn-ghost">RANDOM RUN</button><button id="btnBreach" class="btn-ghost">SIMULATE BREACH</button></div>
+      </div>
+
+      <div class="module">
+        <h4>Modules</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="chip" id="mDiag">Diagnostics</div>
+          <div class="chip" id="mSynth">Synthesis</div>
+          <div class="chip" id="mContain">Containment</div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <div class="modal" id="modalLore" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>PANACEA PRIME — DIEGETIC DOSSIER</h3>
+      <p class="muted">Class‑VII Autonomous Biomedical Cognitive Engine — Declassified briefing (redacted)</p>
+      <div style="display:grid;grid-template-columns:1fr 200px;gap:12px;margin-top:12px">
+        <div>
+          <p><strong>Operator Notes:</strong> PANACEA PRIME was developed under Project Helios to model emergent synthetic pathologies and propose theoretical remediation pathways. All outputs are fictional.</p>
+          <p><em>Directive 12‑A:</em> Under no circumstances shall PANACEA PRIME be used to make real clinical decisions without rigorous validation.</p>
+        </div>
+        <div>
+          <ul class="meta" style="margin:0;padding-left:18px">
+            <li>Established: 2091</li>
+            <li>Lead AI: ARGOS‑7</li>
+            <li>Clearance: HELIO‑7+</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:12px;text-align:right"><button id="closeLore" class="btn-ghost">CLOSE</button></div>
     </div>
+  </div>
 
-    <script>
-        // DOM Elements
-        const initBtn = document.getElementById('initBtn');
-        const diseaseInput = document.getElementById('diseaseInput');
-        const terminal = document.getElementById('log-content');
-        const progressBar = document.getElementById('progress-bar');
-        const percentDisplay = document.getElementById('percent-display');
-        const chip = document.getElementById('input-panel');
-        const systemState = document.getElementById('system-state');
-        const threadCount = document.getElementById('thread-count');
-        const etaDisplay = document.getElementById('eta-display');
-        const successOverlay = document.getElementById('success-overlay');
-        const successCard = document.getElementById('success-card');
-        const cureCode = document.getElementById('cure-code');
+  <script>
+    // ------------------ Fictional afflictions DB ------------------
+    const AFFLICTIONS = [
+      {id:'VX-94', name:'Synthetic Neuro-Disruptor Virus', severity:'Critical', key:'GAMMA-3X'},
+      {id:'OBL-3', name:'Obsidian Bone Lattice Syndrome', severity:'High', key:'OBLX/77'},
+      {id:'EKO-N1', name:'Quantum Echo Parasitic Loop', severity:'High', key:'EKO::N1'},
+      {id:'SYN-0', name:'Synaptic Null Collapse', severity:'Medium', key:'SYN0-NA'},
+      {id:'PLASM-A', name:'Plasmatic Drift Affliction', severity:'Low', key:'PLSMA-A'},
+      {id:'NEX-11', name:'Nexis Protein Misfold', severity:'Medium', key:'NEX11-AL'},
+      {id:'TH-DELTA', name:'Thermal Delamination Syndrome', severity:'Low', key:'THD-12'},
+      {id:'ARC-4', name:'Arcogenic Cellular Fuse', severity:'High', key:'ARC-4Z'},
+      {id:'LUC-9', name:'Lucent Membrane Erosion', severity:'Critical', key:'L9-ME'},
+      {id:'QX-VOID', name:'Quantum Void Residue', severity:'Unknown', key:'QX-VOID'},
+      {id:'Z-ORBIT', name:'Zero-Orbit Viral Spiral', severity:'High', key:'ZORB/9'},
+      {id:'HYDRA-02', name:'Hydra Polymorphic Syndrome', severity:'Medium', key:'HYD02'},
+      {id:'MIR-7', name:'Mirror-Phase Contagion', severity:'Critical', key:'MIR7-REF'},
+      {id:'IONIC', name:'Ionic Cascade Decay', severity:'Medium', key:'ION-CASCADE'},
+      {id:'PRSM-5', name:'Prismogenic Replicant Malady', severity:'Low', key:'PR5'},
+    ];
 
-        // Technobabble lines for the "Prep Time"
-        const logs = [
-            "Accessing Global Bio-Database [SECURE]...",
-            "Sequencing target genome structure...",
-            "Identifying molecular weaknesses...",
-            "Allocating Neural Core Cluster [Node 0-99]...",
-            "Prep Time Logic initialized...",
-            "Simulating evolutionary pathways...",
-            "Running Monte Carlo simulations (x1,000,000)...",
-            "Consulting historical medical archives...",
-            "Optimizing protein folding algorithms...",
-            "Synthesizing counter-agent...",
-            "Checking for side effects... [None found]",
-            "Bypassing biological firewalls...",
-            "Encrypting molecular payload...",
-            "Finalizing chemical structure..."
-        ];
+    // DOM refs
+    const stream = document.getElementById('stream');
+    const bar = document.getElementById('bar');
+    const progressText = document.getElementById('progressText');
+    const scenariosEl = document.getElementById('scenarios');
+    const latEl = document.getElementById('latency');
+    const affInput = document.getElementById('affInput');
+    const runBtn = document.getElementById('runBtn');
+    const samples = document.getElementById('samples');
+    const btnRandom = document.getElementById('btnRandom');
+    const btnBreach = document.getElementById('btnBreach');
+    const modalLore = document.getElementById('modalLore');
+    const btnLore = document.getElementById('btnLore');
+    const closeLore = document.getElementById('closeLore');
+    const btnModules = document.getElementById('btnModules');
 
-        let isProcessing = false;
+    // populate sample chips
+    AFFLICTIONS.forEach(a=>{
+      const el = document.createElement('div'); el.className='chip'; el.textContent=a.id; el.title=a.name;
+      el.addEventListener('click', ()=>{affInput.value=a.id; runAnalysis(a.id)});
+      samples.appendChild(el);
+    });
 
-        // Typewriter effect for logs
-        function typeWriter(text, element, speed = 10) {
-            let i = 0;
-            element.innerHTML = `<span class="opacity-50">[${getCurrentTime()}]</span> > `; // Clear previous cursor
-            element.classList.add('log-cursor');
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                    // Auto scroll
-                    const terminalWindow = document.getElementById('terminal');
-                    terminalWindow.scrollTop = terminalWindow.scrollHeight;
-                } else {
-                    element.classList.remove('log-cursor');
-                }
-            }
-            type();
+    // Utility: append line with optional delay
+    function appendLine(text, cls){
+      const node = document.createElement('div'); node.className='line '+(cls||''); node.textContent = text; stream.appendChild(node); stream.scrollTop = stream.scrollHeight; return node;
+    }
+
+    function randomInt(max){return Math.floor(Math.random()*max)}
+
+    // Fake progress simulation
+    async function fakeProgress(duration = 2500, onUpdate){
+      const start = performance.now();
+      return new Promise(resolve=>{
+        function tick(now){
+          const t = Math.min(1,(now-start)/duration);
+          const eased = Math.pow(t,0.7);
+          const pct = Math.floor(eased*100);
+          bar.style.width = pct + '%';
+          progressText.textContent = pct + '%';
+          if(onUpdate) onUpdate(pct);
+          if(t<1) requestAnimationFrame(tick); else resolve();
         }
+        requestAnimationFrame(tick);
+      })
+    }
 
-        function getCurrentTime() {
-            const now = new Date();
-            return now.getHours().toString().padStart(2, '0') + ":" + 
-                   now.getMinutes().toString().padStart(2, '0') + ":" + 
-                   now.getSeconds().toString().padStart(2, '0');
+    // Main analysis flow
+    async function runAnalysis(target){
+      // clear small bits
+      appendLine('INPUT: ' + target, 'muted');
+      // simulate variable latency
+      const latency = 8 + randomInt(60);
+      latEl.textContent = latency + 'ms';
+
+      // scenario bump
+      const current = Number(scenariosEl.textContent.replace(/,/g,'')) || 14000605;
+      scenariosEl.textContent = (current + randomInt(300)+10).toLocaleString();
+
+      // begin log
+      appendLine('\n[INITIALIZING MODULES] — Loading vectorizers, molecular lattice map, cross-reference index.');
+      await fakeProgress(1100);
+      appendLine('[STATUS] Neural vector cores: ONLINE');
+      await new Promise(r=>setTimeout(r,220));
+
+      // analyze pattern
+      appendLine('[ANALYZER] Parsing Affliction ID...');
+      await fakeProgress(900);
+
+      // find affliction
+      const found = AFFLICTIONS.find(a=>a.id.toLowerCase()===target.toLowerCase());
+      if(!found){
+        // unknown path: randomized creative output
+        appendLine('\n[RESULT] Affliction not catalogued. Generating hypothetical model...');
+        await fakeProgress(1200);
+        const seed = Math.random().toString(36).slice(2,8).toUpperCase();
+        appendLine('HYPOTHETICAL PATHWAY ID: ' + seed);
+        appendLine('MOLECULAR KEY: ' + (['PR-','GX-','QX-','AL-'][randomInt(4)]) + randomInt(9999));
+        appendLine('\nSuggested containment: ' + (['ISOLATE SECTOR','SYNTHETIC STABILIZATION','PHASED DISPLACEMENT'][randomInt(3)]));
+        appendLine('\n[NOTE] This result is a simulation. No clinical validity.');
+        await new Promise(r=>setTimeout(r,300));
+        bar.style.width = '100%'; progressText.textContent='100%';
+        return;
+      }
+
+      // if found, produce rich diegetic output
+      appendLine('\n[AFFLICTION] ' + found.id + ' — ' + found.name);
+      appendLine('[SEVERITY] ' + found.severity + ' — Cross-reference: ' + (Math.random()>0.6? 'ARCHIVE MATCH: ' + AFFLICTIONS[randomInt(AFFLICTIONS.length)].id : 'NO DIRECT MATCH'));
+      await fakeProgress(1400, pct=>{
+        // mid-run streaming facts
+        if(pct>25 && pct<35 && !document.getElementById('fact1')){
+          const n = appendLine('[STREAM] Cross-linking protein topologies...'); n.id='fact1';
         }
-
-        function addLog(text, type = 'log-info') {
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            terminal.appendChild(entry);
-            typeWriter(text, entry);
+        if(pct>60 && pct<70 && !document.getElementById('fact2')){
+          const n = appendLine('[STREAM] Computing entropic correction factors...'); n.id='fact2';
         }
+      });
 
-        function generateRandomString(length) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            for ( let i = 0; i < length; i++ ) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }
+      // present molecular key + cure path (fictional)
+      const keys = ['GEN-','CYT-','MOX-','HEX-'];
+      const mk = keys[randomInt(keys.length)] + Math.random().toString(36).slice(2,6).toUpperCase();
+      appendLine('\n[OPTIMAL PATH FOUND] — MOLECULAR KEY: ' + mk);
+      appendLine('[SYNTHESIS] Construct composite agent using:');
+      appendLine('  - Lattice scaffold: ' + (['ALPHA','OMEGA','SIGMA'][randomInt(3)]));
+      appendLine('  - Reactive tag: ' + (['Hydroxyl','Amino','Phasic'][randomInt(3)]));
+      appendLine('  - Temporal vector: T+'+ (10 + randomInt(400)) +'ms');
 
-        function decryptText(element, finalText) {
-            let iterations = 0;
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-            const interval = setInterval(() => {
-                element.innerText = finalText
-                    .split('')
-                    .map((letter, index) => {
-                        if(index < iterations) {
-                            return finalText[index];
-                        }
-                        return chars[Math.floor(Math.random() * chars.length)]
-                    })
-                    .join('');
-                
-                if(iterations >= finalText.length) {
-                    clearInterval(interval);
-                }
-                
-                iterations += 1/3; // Slow down the reveal
-            }, 30);
-        }
+      // optional animated success
+      await fakeProgress(800);
+      appendLine('\n[CONTAINMENT] Recommended: ' + (found.severity==='Critical' ? 'Immediate global quarantine; deploy synthesis units.' : 'Local isolation; deploy adaptive synthesis.' ));
+      appendLine('\n[REPORT] Delivery packet: PANACEA::' + mk + ' (encrypted)');
+      appendLine('\n[NOTE] Simulation complete. All signatures logged.');
 
-        function startSequence() {
-            const disease = diseaseInput.value.trim();
-            
-            if (!disease) {
-                addLog("ERROR: TARGET UNDEFINED. INPUT REQUIRED.", "log-warn");
-                diseaseInput.focus();
-                diseaseInput.classList.add('border-red-500');
-                setTimeout(() => diseaseInput.classList.remove('border-red-500'), 1000);
-                return;
-            }
+      bar.style.width = '100%'; progressText.textContent='100%';
+    }
 
-            if (isProcessing) return;
-            isProcessing = true;
+    // Bind UI
+    runBtn.addEventListener('click', ()=>{ const t = affInput.value.trim(); if(!t) { appendLine('[ERROR] No input supplied. Try a sample affliction ID.','muted'); return } ; stream.innerHTML=''; bar.style.width='0%'; progressText.textContent='0%'; runAnalysis(t); });
+    btnRandom.addEventListener('click', ()=>{ const a = AFFLICTIONS[randomInt(AFFLICTIONS.length)]; affInput.value=a.id; stream.innerHTML=''; bar.style.width='0%'; progressText.textContent='0%'; runAnalysis(a.id); });
 
-            // UI Updates
-            initBtn.disabled = true;
-            chip.classList.add('chip-active');
-            systemState.innerText = "PROCESSING";
-            systemState.className = "text-[10px] text-purple-400 animate-pulse font-bold border border-purple-500 px-2 py-0.5 rounded shadow-[0_0_10px_rgba(176,38,255,0.5)]";
-            
-            addLog(`TARGET LOCKED: "${disease.toUpperCase()}"`, "log-success");
-            setTimeout(() => addLog("INITIATING PREP TIME PROTOCOL..."), 800);
+    btnBreach.addEventListener('click', ()=>{
+      stream.innerHTML=''; appendLine('[ALERT] Unauthorized signature detected — SIMULATED BREACH MODE');
+      appendLine('[SECURITY] Initiating lockdown...');
+      // cinematic breach
+      let steps = ['Firing countermeasures','Rerouting containment corridors','Shredding non-essential indexes','Wiping volatile caches'];
+      (async ()=>{
+        for(let s of steps){ appendLine('[BREACH] ' + s); await fakeProgress(700); }
+        appendLine('[SYSTEM] Containment: REESTABLISHED');
+        bar.style.width='100%'; progressText.textContent='100%';
+      })();
+    });
 
-            let progress = 0;
-            let logIndex = 0;
-            
-            // Variable speed for "Prep Time"
-            const totalDuration = 6000 + Math.random() * 2000;
-            const intervalTime = 50;
-            const steps = totalDuration / intervalTime;
-            const increment = 100 / steps;
+    // modal lore
+    btnLore.addEventListener('click', ()=>{modalLore.classList.add('show')});
+    closeLore.addEventListener('click', ()=>{modalLore.classList.remove('show')});
 
-            const timer = setInterval(() => {
-                progress += increment;
-                
-                // Update threads randomly for effect
-                threadCount.innerText = Math.floor(Math.random() * 90000) + 10000;
-                etaDisplay.innerText = ((100 - progress) / 10).toFixed(2) + " SEC";
+    // modules toggle (simple)
+    document.getElementById('mDiag').addEventListener('click', ()=>{ appendLine('[MODULE] Diagnostics engaged — Live telemetry streaming...'); });
+    document.getElementById('mSynth').addEventListener('click', ()=>{ appendLine('[MODULE] Synthesis queued — Simulating molecular assembly...'); });
+    document.getElementById('mContain').addEventListener('click', ()=>{ appendLine('[MODULE] Containment protocols active — Pressure valves nominal'); });
 
-                // Update Progress Bar
-                if (progress >= 100) progress = 100;
-                progressBar.style.width = `${progress}%`;
-                percentDisplay.innerText = `${Math.floor(progress)}%`;
+    // small accessibility niceties
+    affInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ runBtn.click(); } });
 
-                // Add random logs
-                if (Math.random() > 0.9 && logIndex < logs.length) {
-                    addLog(logs[logIndex]);
-                    logIndex++;
-                }
+    // initial welcome
+    (async ()=>{
+      appendLine('PANACEA PRIME — Boot sequence complete.');
+      appendLine('[NOTICE] This interface is fictional—no medical claims implied.');
+      appendLine('\nAwaiting target input...');
+    })();
 
-                if (progress >= 100) {
-                    clearInterval(timer);
-                    finalizeCure();
-                }
-            }, intervalTime);
-        }
+    // keyboard easter: press M to trigger modules modal
+    window.addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='m'){ document.getElementById('mDiag').click(); }});
 
-        function finalizeCure() {
-            addLog("ANALYSIS COMPLETE.", "log-success");
-            addLog("SOLUTION FOUND.", "log-success");
-            
-            setTimeout(() => {
-                showSuccess();
-            }, 1000);
-        }
-
-        function showSuccess() {
-            successOverlay.classList.remove('hidden');
-            // Small delay to allow display block to apply before scaling
-            setTimeout(() => {
-                successCard.classList.remove('scale-0');
-                successCard.classList.add('scale-100');
-                
-                // Generate and decrypt cure
-                const cureId = `PAN-${generateRandomString(4)}-${generateRandomString(4)}-OMEGA`;
-                decryptText(cureCode, cureId);
-            }, 50);
-        }
-
-        function resetApp() {
-            successCard.classList.remove('scale-100');
-            successCard.classList.add('scale-0');
-            setTimeout(() => {
-                successOverlay.classList.add('hidden');
-            }, 300);
-
-            // Reset State
-            isProcessing = false;
-            progressBar.style.width = '0%';
-            percentDisplay.innerText = '0%';
-            initBtn.disabled = false;
-            chip.classList.remove('chip-active');
-            systemState.innerText = "STANDBY";
-            systemState.className = "text-[10px] text-gray-500 animate-pulse border border-gray-700 px-2 py-0.5 rounded";
-            diseaseInput.value = '';
-            
-            // Clear logs but keep init
-            terminal.innerHTML = '<div class="scan-line"></div><div id="log-content" class="space-y-1"><div class="log-entry log-info">> System purged. Ready for new input.</div></div>';
-        }
-    </script>
+  </script>
 </body>
 </html>
